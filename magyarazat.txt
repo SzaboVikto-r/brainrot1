@@ -1,0 +1,114 @@
+C/C++ ALAPFOGALMAK
+==================
+
+1. VÁLTOZÓ
+----------
+Egy névvel ellátott tárterület, amely egyetlen értéket tárol.
+Típusa meghatározza, mekkora helyet foglal és milyen értéket vehet fel.
+
+    int kor = 20;
+    double magassag = 1.75;
+    char betu = 'A';
+
+Veszély: nem inicializált változó olvasása -> undefined behavior.
+
+
+2. POINTER
+----------
+Egy változó, amely egy másik változó memóriacímét tárolja.
+A * operátorral dereferenciálható (az értékhez jutunk), a & operátorral
+kapjuk meg egy változó címét.
+
+    int x = 5;
+    int* p = &x;   // p tartalmazza x cimét
+    *p = 10;       // x értéke most 10
+
+Veszély: null vagy érvénytelen pointer dereferenciálása -> segfault.
+
+
+3. ÉRTÉK SZERINTI ÁTADÁS (Pass by Value)
+-----------------------------------------
+A függvény az argumentum másolatát kapja. Az eredeti változó
+nem módosul, bármit is csinálunk a paraméterrel.
+
+    void dupla(int x) { x *= 2; }  // csak a masola valtozik
+
+    int a = 5;
+    dupla(a);
+    // a értéke még mindig 5
+
+
+4. REFERENCIA SZERINTI ÁTADÁS (Pass by Reference)
+--------------------------------------------------
+A függvény az eredeti változóhoz kap közvetlen hozzáférést.
+Módosítás az eredetit érinti.
+
+    void dupla(int& x) { x *= 2; }  // az eredetit modositja
+
+    int a = 5;
+    dupla(a);
+    // a értéke most 10
+
+
+5. HATÓKÖR (Scope)
+------------------
+Egy változó csak abban a { } blokkban létezik, amelyikben deklarálták.
+A blokk végén automatikusan megsemmisül.
+
+    int x = 1;          // külső x
+    {
+        int x = 100;    // belső x, teljesen más változó
+    }                   // belső x megsemmisül
+    // itt x == 1
+
+
+6. SABLON (Template)
+--------------------
+Általános, típusfüggetlen kód írása. A fordító a konkrét típusra
+generálja le a függvényt vagy osztályt.
+
+    template<typename T>
+    T maximum(T a, T b) { return a > b ? a : b; }
+
+    maximum(3, 7);        // int változat
+    maximum(1.5, 2.5);    // double változat
+
+
+7. REKURZIÓ
+-----------
+Egy függvény önmagát hívja meg. Szükséges az alapleset (base case),
+különben végtelen rekurziót kapunk -> stack overflow.
+
+    int faktorial(int n) {
+        if (n <= 1) return 1;       // alapleset
+        return n * faktorial(n-1);  // rekurzív lépés
+    }
+
+
+8. NULLPTR
+----------
+A C++11-ben bevezetett típusbiztos null pointer konstans.
+Soha ne dereferenciálj nullptr-t.
+
+    int* p = nullptr;
+    if (p != nullptr) { *p = 5; }  // biztonságos ellenőrzés
+
+
+──────────────────────────────────────────────
+VESZÉLYES HELYZETEK
+──────────────────────────────────────────────
+
+SEGFAULT
+    Érvénytelen memóriacím olvasása/írása.
+    Pl.: nullptr dereferenciálása, tömb határán túli indexelés.
+
+STACK OVERFLOW
+    A verem megtelik, mert a rekurzió nem ér véget (hiányzó alapleset).
+
+MEMORY LEAK
+    new-val foglalt memória nem kerül felszabadításra (delete hiánya).
+    Modern C++-ban: használj smart pointereket (unique_ptr, shared_ptr).
+
+UNDEFINED BEHAVIOR
+    A szabvány nem definiálja a viselkedést: nem inicializált változó
+    olvasása, előjeles egész túlcsordulása, stb. A program bármit csinálhat.
