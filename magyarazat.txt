@@ -1,167 +1,62 @@
-C / C++ alapok — magyarázó
---------------------------
+C / C++ alapok magyarázat
 
-Szóval ha először találkozol ezekkel a fogalmakkal, ne ijedj meg.
-Mindegyik mögött egy egyszerű ötlet van, csak kicsit furán néznek ki elsőre.
+Változó
 
+Egy névvel ellátott doboz, amiben egyetlen értéket tárolsz. Lehet szám, szöveg, logikai érték, bármi. Fontos hogy mindig adj neki kezdőértéket, mert ha nem, akkor valami véletlenszerű szemét lesz benne.
 
-── Változó Vlad ──────────────────────────────────────────────────────────
+Pointer
 
-Vlad egyszerű srác. Egyetlen dolgot tárol, és azt komolyan veszi.
+A pointer nem maga az érték, hanem egy cím, ami megmutatja hol van az érték a memóriában. A & jellel kéred el egy változó címét, a * jellel éred el azt ami azon a címen van. Ha null pointert próbálsz kiolvasni, a program elszáll.
 
-    int kor = 20;
-    double magassag = 1.75;
+Érték szerinti átadás
 
-Ha nem adsz neki kezdőértéket, random szemetet fog tartalmazni.
-Ne olvasd ki inicializálás előtt — ez undefined behavior (lásd Ubult lent).
+Ha egy függvénynek így adsz át egy változót, a függvény csak egy másolatot kap. Bármit csinál azzal a másolattal, az eredeti változód érintetlen marad.
 
+Referencia szerinti átadás
 
-── Pointer Pete ──────────────────────────────────────────────────────────
+Ha & jellel adsz át egy változót, a függvény az eredetihez fér hozzá. Amit megváltoztat, az tényleg megváltozik. Nagyobb adatoknál gyorsabb is mint a másolgatás.
 
-Pete nem maga az érték — ő tudja, hol lakik az érték.
-A * jelenti hogy "menj oda", a & jelenti hogy "hol van".
+Hatókör
 
-    int x = 5;
-    int* p = &x;   // p tudja, hol van x
-    *p = 10;       // x most 10 lesz
+Ami egy kapcsos zárójelen belül jön létre, ott is hal meg. Ha egy változót egy blokkon belül deklarálsz, kívülről nem látod, a blokk végén automatikusan megszűnik.
 
-Ha Pete nullára mutat és mégis dereferenciálod, bejön Samu (segfault).
-Ha Pete-et felszabadítod kétszer, szintén bejön Samu.
+Sablon (template)
 
+Lehetővé teszi hogy ugyanazt a függvényt vagy osztályt különböző típusokra használd. Egyszer írod meg, a fordító legenerálja az int-es, double-ös, stb. változatát automatikusan.
 
-── Xerox Chad ──────────────────────────────────────────────────────────
+Rekurzió
 
-Chad másolatot kap. Az eredeti érintetlen marad, bármennyit is piszkálja.
+Amikor egy függvény saját magát hívja meg. Mindig kell egy alapleset ami leállítja, különben végtelen ciklusba kerül és a program összeomlik. Szépen lehet vele fát bejárni, faktoriálist számítani, ilyesmi.
 
-    void csinal(int x) {
-        x = 999;    // csak a másolatot bántja
-    }
+Nullptr
 
-    int a = 5;
-    csinal(a);
-    // a még mindig 5, Chad csak a saját példányát rombolta le
+A null pointer, vagyis egy pointer ami sehova sem mutat. Arra való hogy jelezze, nincs érvényes értéke. Ha véletlenül kiolvasod, a program azonnal meghal.
 
 
-── Key Dealer Kevin ────────────────────────────────────────────────────
+Veszélyes dolgok amiket kerülj
 
-Kevin nem másolatot kap — ő az eredetihez fér hozzá közvetlenül.
-Gyorsabb, és tényleg megváltoztatja az értéket.
+Segfault akkor jön elő ha érvénytelen memóriacímet próbálsz olvasni vagy írni, leggyakrabban null pointer miatt.
 
-    void megdupla(int& x) {
-        x *= 2;
-    }
+Stack overflow akkor történik ha a rekurzió nem áll le, beteli a verem és a program elszáll.
 
-    int a = 5;
-    megdupla(a);
-    // a most 10
+Memory leak akkor keletkezik ha dinamikusan foglalsz memóriát de soha nem szabadítod fel. Lassan felemészti a memóriát, a program csak később, máshol szokott tőle összeomlani.
+
+Undefined behavior a leggonoszabb. Nem inicializált változó olvasása, tömbön kívüli indexelés, ilyenek. Néha látszólag működik a program, néha nem, géptől és fordítótól függ. Nagyon nehéz megtalálni.
 
 
-── Scope Sensei ────────────────────────────────────────────────────────
+Feladatok
 
-A Sensei tanítása: ami a kapcsos zárójelen belül születik,
-ott is hal meg. Nem látod kívülről, nem hívhatod meg kívülről.
-
-    int x = 1;
-    {
-        int x = 100;    // teljesen más x
-        // itt x == 100
-    }
-    // itt x == 1, a belső x eltűnt
-
-
-── Generic Greg ────────────────────────────────────────────────────────
-
-Greg bármivé válik amire szükség van. Megírod egyszer, működik
-int-re, double-re, stringre — a fordító generálja le neked.
-
-    template<typename T>
-    T maxVal(T a, T b) {
-        return a > b ? a : b;
-    }
-
-    maxVal(3, 7);         // int
-    maxVal(1.5, 2.5);     // double
-
-
-── Recursion Rick ──────────────────────────────────────────────────────
-
-Rick önmagát hívja meg. Szép és elegáns tud lenni, de
-alapleset nélkül egyenesen Stanhoz vezet (stack overflow).
-
-    int faktorial(int n) {
-        if (n <= 1) return 1;        // alapleset — ez állítja meg
-        return n * faktorial(n - 1);
-    }
-
-
-── Null Nick ───────────────────────────────────────────────────────────
-
-Nick a semmit képviseli. Hasznos jelzőként, halálos ha dereferenciálod.
-
-    int* p = nullptr;
-
-    if (p != nullptr) {
-        *p = 5;    // biztonságos, csak ha nem null
-    }
-
-
-══════════════════════════════════════════════════════════════════════════
-BOSS KARAKTEREK — ezeket kerüld el
-══════════════════════════════════════════════════════════════════════════
-
-Segfault Samu
-    Null vagy érvénytelen pointert dereferenciálsz.
-    Bejön és lelövi a programot. Nem tárgyal.
-
-Stack Overflow Stan
-    Végtelen rekurzió, alapleset nélkül. A verem megtelik,
-    Stan megjelenik, program vége.
-
-Memory Leak Miki
-    new-val foglaltál, delete nélkül engedted el.
-    Miki csendben eszik a memóriádból. Soha nem jelez,
-    csak lassan elfogy minden. Használj unique_ptr-t helyette.
-
-Undefined Behavior Ubul
-    Nem inicializált változó, előjeles egész túlcsordulás,
-    tömbön kívüli indexelés. Ubul a legveszélyesebb — a program
-    néha "működik", néha nem, fordítótól és naptól függ.
-
-
-══════════════════════════════════════════════════════════════════════════
-FELADATOK
-══════════════════════════════════════════════════════════════════════════
-
-1. Ki az?
-   Párosítsd a karaktert a fogalommal:
-   a) Tudja hol lakik az érték, de nem ő az érték
-   b) Másolatot kap, az eredetit nem bántja
-   c) Kapcsos zárójelen kívül nem látható
-   d) Önmagát hívja meg
-
-2. Töltsd ki a hiányokat!
-
+1. Mi lesz x értéke a következő kód után?
    int x = 10;
-   int__ p = __x;
-   __p = 20;
-   // x most: ___
+   int* p = &x;
+   *p = 20;
 
-   void novel(______ n) { n++; }
-   int a = 3;
-   novel(a);
-   // a most: ___
+2. Mi a különbség a következő két függvény között és mit csinálnak az a változóval?
+   void f1(int x)  { x = 99; }
+   void f2(int& x) { x = 99; }
 
-3. Mi a hiba?
-
+3. Mi a hiba ebben a kódban?
    int* p;
-   *p = 5;        // ← mi történik és miért?
+   *p = 5;
 
-   void f() { f(); }
-   f();           // ← melyik boss karakter jön be?
-
-   int t[3] = {1,2,3};
-   t[5] = 99;    // ← melyik boss karakter és miért?
-
-4. Írj egy saját példát Recursion Rickre!
-   (bármilyen feladat amiben egy szám kiszámításához
-   kisebb részeit is ki kell számítani)
+4. Írj egy rekurzív függvényt ami összeadja az 1-től n-ig tartó számokat.
