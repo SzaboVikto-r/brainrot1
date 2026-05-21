@@ -1,47 +1,47 @@
 C / C++ alapok magyarázat
 
-Változó
+Változó Vlad
 
 Egy névvel ellátott doboz, amiben egyetlen értéket tárolsz. Lehet szám, szöveg, logikai érték, bármi. Fontos hogy mindig adj neki kezdőértéket, mert ha nem, akkor valami véletlenszerű szemét lesz benne.
 
-Pointer
+Pointer Pete
 
 A pointer nem maga az érték, hanem egy cím, ami megmutatja hol van az érték a memóriában. A & jellel kéred el egy változó címét, a * jellel éred el azt ami azon a címen van. Ha null pointert próbálsz kiolvasni, a program elszáll.
 
-Érték szerinti átadás
+Xerox Chad - érték szerinti átadás
 
 Ha egy függvénynek így adsz át egy változót, a függvény csak egy másolatot kap. Bármit csinál azzal a másolattal, az eredeti változód érintetlen marad.
 
-Referencia szerinti átadás
+Key Dealer Kevin - referencia szerinti átadás
 
 Ha & jellel adsz át egy változót, a függvény az eredetihez fér hozzá. Amit megváltoztat, az tényleg megváltozik. Nagyobb adatoknál gyorsabb is mint a másolgatás.
 
-Hatókör
+Scope Sensei - hatókör
 
 Ami egy kapcsos zárójelen belül jön létre, ott is hal meg. Ha egy változót egy blokkon belül deklarálsz, kívülről nem látod, a blokk végén automatikusan megszűnik.
 
-Sablon (template)
+Generic Greg - sablon (template)
 
 Lehetővé teszi hogy ugyanazt a függvényt vagy osztályt különböző típusokra használd. Egyszer írod meg, a fordító legenerálja az int-es, double-ös, stb. változatát automatikusan.
 
-Rekurzió
+Recursion Rick
 
 Amikor egy függvény saját magát hívja meg. Mindig kell egy alapleset ami leállítja, különben végtelen ciklusba kerül és a program összeomlik. Szépen lehet vele fát bejárni, faktoriálist számítani, ilyesmi.
 
-Nullptr
+Null Nick
 
 A null pointer, vagyis egy pointer ami sehova sem mutat. Arra való hogy jelezze, nincs érvényes értéke. Ha véletlenül kiolvasod, a program azonnal meghal.
 
 
 Veszélyes dolgok amiket kerülj
 
-Segfault akkor jön elő ha érvénytelen memóriacímet próbálsz olvasni vagy írni, leggyakrabban null pointer miatt.
+Segfault Samu akkor jön elő ha érvénytelen memóriacímet próbálsz olvasni vagy írni, leggyakrabban null pointer miatt.
 
-Stack overflow akkor történik ha a rekurzió nem áll le, beteli a verem és a program elszáll.
+Stack Overflow Stan akkor történik ha a rekurzió nem áll le, beteli a verem és a program elszáll.
 
-Memory leak akkor keletkezik ha dinamikusan foglalsz memóriát de soha nem szabadítod fel. Lassan felemészti a memóriát, a program csak később, máshol szokott tőle összeomlani.
+Memory Leak Miki akkor keletkezik ha dinamikusan foglalsz memóriát de soha nem szabadítod fel. Lassan felemészti a memóriát, a program csak később, máshol szokott tőle összeomlani.
 
-Undefined behavior a leggonoszabb. Nem inicializált változó olvasása, tömbön kívüli indexelés, ilyenek. Néha látszólag működik a program, néha nem, géptől és fordítótól függ. Nagyon nehéz megtalálni.
+Undefined Behavior Ubul a leggonoszabb. Nem inicializált változó olvasása, tömbön kívüli indexelés, ilyenek. Néha látszólag működik a program, néha nem, géptől és fordítótól függ. Nagyon nehéz megtalálni.
 
 
 Feladatok
