@@ -1,114 +1,167 @@
-C/C++ ALAPFOGALMAK
-==================
+C / C++ alapok — magyarázó
+--------------------------
 
-1. VÁLTOZÓ
-----------
-Egy névvel ellátott tárterület, amely egyetlen értéket tárol.
-Típusa meghatározza, mekkora helyet foglal és milyen értéket vehet fel.
+Szóval ha először találkozol ezekkel a fogalmakkal, ne ijedj meg.
+Mindegyik mögött egy egyszerű ötlet van, csak kicsit furán néznek ki elsőre.
+
+
+── Változó Vlad ──────────────────────────────────────────────────────────
+
+Vlad egyszerű srác. Egyetlen dolgot tárol, és azt komolyan veszi.
 
     int kor = 20;
     double magassag = 1.75;
-    char betu = 'A';
 
-Veszély: nem inicializált változó olvasása -> undefined behavior.
+Ha nem adsz neki kezdőértéket, random szemetet fog tartalmazni.
+Ne olvasd ki inicializálás előtt — ez undefined behavior (lásd Ubult lent).
 
 
-2. POINTER
-----------
-Egy változó, amely egy másik változó memóriacímét tárolja.
-A * operátorral dereferenciálható (az értékhez jutunk), a & operátorral
-kapjuk meg egy változó címét.
+── Pointer Pete ──────────────────────────────────────────────────────────
+
+Pete nem maga az érték — ő tudja, hol lakik az érték.
+A * jelenti hogy "menj oda", a & jelenti hogy "hol van".
 
     int x = 5;
-    int* p = &x;   // p tartalmazza x cimét
-    *p = 10;       // x értéke most 10
+    int* p = &x;   // p tudja, hol van x
+    *p = 10;       // x most 10 lesz
 
-Veszély: null vagy érvénytelen pointer dereferenciálása -> segfault.
-
-
-3. ÉRTÉK SZERINTI ÁTADÁS (Pass by Value)
------------------------------------------
-A függvény az argumentum másolatát kapja. Az eredeti változó
-nem módosul, bármit is csinálunk a paraméterrel.
-
-    void dupla(int x) { x *= 2; }  // csak a masola valtozik
-
-    int a = 5;
-    dupla(a);
-    // a értéke még mindig 5
+Ha Pete nullára mutat és mégis dereferenciálod, bejön Samu (segfault).
+Ha Pete-et felszabadítod kétszer, szintén bejön Samu.
 
 
-4. REFERENCIA SZERINTI ÁTADÁS (Pass by Reference)
---------------------------------------------------
-A függvény az eredeti változóhoz kap közvetlen hozzáférést.
-Módosítás az eredetit érinti.
+── Xerox Chad ──────────────────────────────────────────────────────────
 
-    void dupla(int& x) { x *= 2; }  // az eredetit modositja
+Chad másolatot kap. Az eredeti érintetlen marad, bármennyit is piszkálja.
+
+    void csinal(int x) {
+        x = 999;    // csak a másolatot bántja
+    }
 
     int a = 5;
-    dupla(a);
-    // a értéke most 10
+    csinal(a);
+    // a még mindig 5, Chad csak a saját példányát rombolta le
 
 
-5. HATÓKÖR (Scope)
-------------------
-Egy változó csak abban a { } blokkban létezik, amelyikben deklarálták.
-A blokk végén automatikusan megsemmisül.
+── Key Dealer Kevin ────────────────────────────────────────────────────
 
-    int x = 1;          // külső x
+Kevin nem másolatot kap — ő az eredetihez fér hozzá közvetlenül.
+Gyorsabb, és tényleg megváltoztatja az értéket.
+
+    void megdupla(int& x) {
+        x *= 2;
+    }
+
+    int a = 5;
+    megdupla(a);
+    // a most 10
+
+
+── Scope Sensei ────────────────────────────────────────────────────────
+
+A Sensei tanítása: ami a kapcsos zárójelen belül születik,
+ott is hal meg. Nem látod kívülről, nem hívhatod meg kívülről.
+
+    int x = 1;
     {
-        int x = 100;    // belső x, teljesen más változó
-    }                   // belső x megsemmisül
-    // itt x == 1
+        int x = 100;    // teljesen más x
+        // itt x == 100
+    }
+    // itt x == 1, a belső x eltűnt
 
 
-6. SABLON (Template)
---------------------
-Általános, típusfüggetlen kód írása. A fordító a konkrét típusra
-generálja le a függvényt vagy osztályt.
+── Generic Greg ────────────────────────────────────────────────────────
+
+Greg bármivé válik amire szükség van. Megírod egyszer, működik
+int-re, double-re, stringre — a fordító generálja le neked.
 
     template<typename T>
-    T maximum(T a, T b) { return a > b ? a : b; }
+    T maxVal(T a, T b) {
+        return a > b ? a : b;
+    }
 
-    maximum(3, 7);        // int változat
-    maximum(1.5, 2.5);    // double változat
+    maxVal(3, 7);         // int
+    maxVal(1.5, 2.5);     // double
 
 
-7. REKURZIÓ
------------
-Egy függvény önmagát hívja meg. Szükséges az alapleset (base case),
-különben végtelen rekurziót kapunk -> stack overflow.
+── Recursion Rick ──────────────────────────────────────────────────────
+
+Rick önmagát hívja meg. Szép és elegáns tud lenni, de
+alapleset nélkül egyenesen Stanhoz vezet (stack overflow).
 
     int faktorial(int n) {
-        if (n <= 1) return 1;       // alapleset
-        return n * faktorial(n-1);  // rekurzív lépés
+        if (n <= 1) return 1;        // alapleset — ez állítja meg
+        return n * faktorial(n - 1);
     }
 
 
-8. NULLPTR
-----------
-A C++11-ben bevezetett típusbiztos null pointer konstans.
-Soha ne dereferenciálj nullptr-t.
+── Null Nick ───────────────────────────────────────────────────────────
+
+Nick a semmit képviseli. Hasznos jelzőként, halálos ha dereferenciálod.
 
     int* p = nullptr;
-    if (p != nullptr) { *p = 5; }  // biztonságos ellenőrzés
+
+    if (p != nullptr) {
+        *p = 5;    // biztonságos, csak ha nem null
+    }
 
 
-──────────────────────────────────────────────
-VESZÉLYES HELYZETEK
-──────────────────────────────────────────────
+══════════════════════════════════════════════════════════════════════════
+BOSS KARAKTEREK — ezeket kerüld el
+══════════════════════════════════════════════════════════════════════════
 
-SEGFAULT
-    Érvénytelen memóriacím olvasása/írása.
-    Pl.: nullptr dereferenciálása, tömb határán túli indexelés.
+Segfault Samu
+    Null vagy érvénytelen pointert dereferenciálsz.
+    Bejön és lelövi a programot. Nem tárgyal.
 
-STACK OVERFLOW
-    A verem megtelik, mert a rekurzió nem ér véget (hiányzó alapleset).
+Stack Overflow Stan
+    Végtelen rekurzió, alapleset nélkül. A verem megtelik,
+    Stan megjelenik, program vége.
 
-MEMORY LEAK
-    new-val foglalt memória nem kerül felszabadításra (delete hiánya).
-    Modern C++-ban: használj smart pointereket (unique_ptr, shared_ptr).
+Memory Leak Miki
+    new-val foglaltál, delete nélkül engedted el.
+    Miki csendben eszik a memóriádból. Soha nem jelez,
+    csak lassan elfogy minden. Használj unique_ptr-t helyette.
 
-UNDEFINED BEHAVIOR
-    A szabvány nem definiálja a viselkedést: nem inicializált változó
-    olvasása, előjeles egész túlcsordulása, stb. A program bármit csinálhat.
+Undefined Behavior Ubul
+    Nem inicializált változó, előjeles egész túlcsordulás,
+    tömbön kívüli indexelés. Ubul a legveszélyesebb — a program
+    néha "működik", néha nem, fordítótól és naptól függ.
+
+
+══════════════════════════════════════════════════════════════════════════
+FELADATOK
+══════════════════════════════════════════════════════════════════════════
+
+1. Ki az?
+   Párosítsd a karaktert a fogalommal:
+   a) Tudja hol lakik az érték, de nem ő az érték
+   b) Másolatot kap, az eredetit nem bántja
+   c) Kapcsos zárójelen kívül nem látható
+   d) Önmagát hívja meg
+
+2. Töltsd ki a hiányokat!
+
+   int x = 10;
+   int__ p = __x;
+   __p = 20;
+   // x most: ___
+
+   void novel(______ n) { n++; }
+   int a = 3;
+   novel(a);
+   // a most: ___
+
+3. Mi a hiba?
+
+   int* p;
+   *p = 5;        // ← mi történik és miért?
+
+   void f() { f(); }
+   f();           // ← melyik boss karakter jön be?
+
+   int t[3] = {1,2,3};
+   t[5] = 99;    // ← melyik boss karakter és miért?
+
+4. Írj egy saját példát Recursion Rickre!
+   (bármilyen feladat amiben egy szám kiszámításához
+   kisebb részeit is ki kell számítani)
